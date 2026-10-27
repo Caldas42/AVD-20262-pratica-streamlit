@@ -1,20 +1,23 @@
-# Configuração do Streamlit. Descomente e ajuste conforme o projeto avançar.
+# Configuração do Streamlit para o dashboard BTD6.
 # O tema pode ser trocado pelo menu ⋮ → Settings → Choose app theme.
-
+#
+# Identidade visual: verde-azulado (teal) como cor de destaque, fundo off-white
+# frio e texto em azul-petróleo. Os gráficos usam teal (Easy) e coral (Hard).
+ 
 [theme]
 paddingTop = "0.0rem"     # espaço abaixo da barra do topo (valor entre aspas)
-# font = "sans serif"     # "sans serif", "serif" ou "monospace"
-
+font = "sans serif"       # "sans serif", "serif" ou "monospace"
+ 
 [theme.light]
-primaryColor = "#c1121f"            # cor de destaque (widgets, links): mesmo vermelho dos histogramas
-backgroundColor = "#ffffff"         # fundo da página
-secondaryBackgroundColor = "#f0f2f6"  # fundo da sidebar e de widgets
-textColor = "#31333f"               # cor do texto
-borderColor = "#d5dae5"
-
+primaryColor = "#000A6F"              # cor de destaque (widgets, links): teal
+backgroundColor = "#fbfaf7"           # fundo da página: off-white
+secondaryBackgroundColor = "#eef3f2"  # fundo da sidebar e de widgets: névoa fria
+textColor = "#1f3a44"                 # cor do texto: azul-petróleo
+borderColor = "#d6e2e0"
+ 
 [theme.dark]
-primaryColor = "#c1121f"
-backgroundColor = "#0e1117"
-secondaryBackgroundColor = "#262730"
-textColor = "#fafafa"
-borderColor = "#41444e"
+primaryColor = "#000A6F"              # teal mais claro, para contrastar no escuro
+backgroundColor = "#0f1b22"
+secondaryBackgroundColor = "#172a33"
+textColor = "#eaf2f0"
+borderColor = "#2c434d"
