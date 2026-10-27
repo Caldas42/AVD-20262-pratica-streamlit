@@ -1,18 +1,18 @@
 # Declaração de Uso de IA
 
-**Nome:**
-**Data:**
+**Nome:** Pedro da Costa Carvalho Caldas
+**Data:** 22/10/2026
 
 ## Ferramenta
 
-<!-- Nome e versão/modelo (ex.: Claude Code, Gemini CLI, ChatGPT). -->
+Claude
 
 ## Prompt usado
 
-<!-- Cole aqui o prompt completo. -->
+Preciso de ajuda na minha disciplina de análise de dados, vou fazer um dashboard com streamlit. Te mandei minha EDA, faça um rascunho de como vai ser o dashboard tomando como exemplo esse rascunho que te mandei.
 
 ## O que foi aceito, modificado ou rejeitado e por quê
 
-- **Aceito:**
-- **Modificado:**
-- **Rejeitado:**
+- **Aceito:** Tudo
+- **Modificado:** Nada
+- **Rejeitado:** Nada
