@@ -9,14 +9,14 @@ paddingTop = "0.0rem"     # espaço abaixo da barra do topo (valor entre aspas)
 font = "sans serif"       # "sans serif", "serif" ou "monospace"
  
 [theme.light]
-primaryColor = "#000A6F"              # cor de destaque (widgets, links): teal
+primaryColor = "#ADD8E6"            # cor de destaque (widgets, links): teal
 backgroundColor = "#fbfaf7"           # fundo da página: off-white
 secondaryBackgroundColor = "#eef3f2"  # fundo da sidebar e de widgets: névoa fria
 textColor = "#1f3a44"                 # cor do texto: azul-petróleo
 borderColor = "#d6e2e0"
  
 [theme.dark]
-primaryColor = "#000A6F"              # teal mais claro, para contrastar no escuro
+primaryColor = "#ADD8E6"                # teal mais claro, para contrastar no escuro
 backgroundColor = "#0f1b22"
 secondaryBackgroundColor = "#172a33"
 textColor = "#eaf2f0"
