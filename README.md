@@ -74,7 +74,7 @@ streamlit run app.py
 
 O passo a passo detalhado de cada aula (Aulas 21, 22 e 23), com pré-requisitos e objetivos, está em [ROTEIRO.md](ROTEIRO.md). Comece por ele depois do Setup.
 
-**Link do app (Aula 23):** _(preencher após o deploy)_
+**Link do app (Aula 23):** https://pedro-caldas-avd-20262-pratica-app.streamlit.app
 
 ## IA neste projeto
 
