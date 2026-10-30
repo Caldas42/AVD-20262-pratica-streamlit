@@ -1,23 +1,26 @@
 # Configuração do Streamlit para o dashboard BTD6.
 # O tema pode ser trocado pelo menu ⋮ → Settings → Choose app theme.
-#
-# Identidade visual: verde-azulado (teal) como cor de destaque, fundo off-white
-# frio e texto em azul-petróleo. Os gráficos usam teal (Easy) e coral (Hard).
- 
+
+# [IA] Claude – identidade visual refeita: azul como cor de destaque e fundos
+# neutros e frios; texto escuro no tema claro e claro (sem ser branco puro) no
+# escuro. Cada tema tem tons próprios do mesmo azul para manter o contraste
+# (texto ≥ 4,5:1 e destaque ≥ 3:1 contra o fundo). Os gráficos usam as mesmas
+# cores no app.py (Okabe-Ito, seguras para daltonismo).
+
 [theme]
 paddingTop = "0.0rem"     # espaço abaixo da barra do topo (valor entre aspas)
 font = "sans serif"       # "sans serif", "serif" ou "monospace"
- 
+
 [theme.light]
-primaryColor = "#ADD8E6"            # cor de destaque (widgets, links): teal
-backgroundColor = "#fbfaf7"           # fundo da página: off-white
-secondaryBackgroundColor = "#eef3f2"  # fundo da sidebar e de widgets: névoa fria
-textColor = "#1f3a44"                 # cor do texto: azul-petróleo
-borderColor = "#d6e2e0"
- 
+primaryColor = "#0072B2"              # destaque (widgets, links): azul Okabe-Ito
+backgroundColor = "#F7F9FC"           # fundo da página: cinza-azulado quase branco
+secondaryBackgroundColor = "#E7EDF5"  # fundo da sidebar e de widgets
+textColor = "#1A2433"                 # texto: azul-marinho quase preto
+borderColor = "#CBD5E1"
+
 [theme.dark]
-primaryColor = "#ADD8E6"                # teal mais claro, para contrastar no escuro
-backgroundColor = "#0f1b22"
-secondaryBackgroundColor = "#172a33"
-textColor = "#eaf2f0"
-borderColor = "#2c434d"
+primaryColor = "#56B4E9"              # azul mais claro, para destacar no escuro
+backgroundColor = "#0F1722"           # fundo da página: azul-marinho profundo
+secondaryBackgroundColor = "#18222F"  # fundo da sidebar e de widgets
+textColor = "#E8EDF3"                 # texto: off-white (evita o branco puro)
+borderColor = "#2A3747"
