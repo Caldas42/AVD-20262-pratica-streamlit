@@ -140,19 +140,21 @@ def grafico_heatmap(corr_long: pd.DataFrame, ordem: list, metodo: str) -> alt.Ch
     return cast(alt.Chart, camadas.properties(width=alt.Step(lado), height=alt.Step(lado)))
 
 
-def grafico_histograma(dados: pd.DataFrame, xlabel: str, kde: bool) -> alt.LayerChart:
+def grafico_histograma(dados: pd.DataFrame, rotulo: str, kde: bool) -> alt.LayerChart:
     passo = (dados["valor"].max() - dados["valor"].min()) / 30
     media, mediana = dados["valor"].mean(), dados["valor"].median()
 
+    # [IA] Claude – eixos invertidos: a variável fica no eixo vertical e a
+    # contagem de rounds no horizontal (barras deitadas)
     # barras mais transparentes (0.55) para a linha KDE, na mesma cor, aparecer por cima
     barras = alt.Chart(dados).mark_bar(opacity=0.55).encode(
-        x=alt.X("valor:Q", bin=alt.Bin(step=passo), title=xlabel),
-        y=alt.Y("count()", stack=None, title="Nº de rounds"),
+        y=alt.Y("valor:Q", bin=alt.Bin(step=passo), title=rotulo),
+        x=alt.X("count()", stack=None, title="Nº de rounds"),
         color=alt.Color("grupo:N", scale=ESCALA_BARRAS,
                         legend=alt.Legend(title="Dificuldade")),
         tooltip=[
             alt.Tooltip("grupo:N", title="Grupo"),
-            alt.Tooltip("valor:Q", bin=alt.Bin(step=passo), title=xlabel),
+            alt.Tooltip("valor:Q", bin=alt.Bin(step=passo), title=rotulo),
             alt.Tooltip("count()", title="Rounds"),
         ],
     )
@@ -160,7 +162,7 @@ def grafico_histograma(dados: pd.DataFrame, xlabel: str, kde: bool) -> alt.Layer
     stats = pd.DataFrame(
         {"estatistica": ["Média", "Mediana"], "valor": [media, mediana]})
     regras = alt.Chart(stats).mark_rule(strokeWidth=2.5).encode(
-        x="valor:Q",
+        y="valor:Q",
         color=alt.Color("estatistica:N", scale=ESCALA_STATS,
                         legend=alt.Legend(title="Estatística")),
         strokeDash=alt.StrokeDash(
@@ -184,8 +186,9 @@ def grafico_histograma(dados: pd.DataFrame, xlabel: str, kde: bool) -> alt.Layer
                 .transform_calculate(contagem=f"datum.densidade * {passo}")
                 .mark_line(strokeWidth=2.5)
                 .encode(
-                    x="valor:Q",
-                    y=alt.Y("contagem:Q", title="Nº de rounds"),
+                    y="valor:Q",
+                    x=alt.X("contagem:Q", title="Nº de rounds"),
+                    order="valor:Q",  # liga os pontos da curva na ordem do eixo vertical
                     color=alt.Color(
                         "grupo:N", scale=ESCALA_BARRAS, legend=None),
                 )
@@ -224,26 +227,36 @@ def mostrar_contexto_dataset() -> None:
         )
 
 
-# [IA] Claude – explicação do histograma logo abaixo do gráfico, que muda
-# conforme as opções escolhidas na sidebar
-def explicar_histograma(var_hist: str, usar_log: bool,
-                        por_dificuldade: bool, mostrar_kde: bool) -> str:
+# [IA] Claude – explicação do histograma logo abaixo do gráfico: muda conforme
+# as opções da sidebar e justifica o uso de um único histograma (e não um por variável)
+def explicar_histograma(var_hist: str, usar_log: bool, por_dificuldade: bool,
+                        mostrar_kde: bool, n_variaveis: int) -> str:
     eixo = f"log(1 + {var_hist})" if usar_log else var_hist
     partes = [
-        f"**Como ler este histograma:** o eixo horizontal mostra o valor de "
-        f"**{eixo}** em um round, dividido em faixas. A altura de cada barra "
-        "mostra **em quantos rounds** o valor cai naquela faixa, então barras "
-        "altas indicam valores mais comuns.",
+        f"**Como ler este histograma:** o eixo vertical mostra o valor de "
+        f"**{eixo}** em um round, dividido em faixas. O comprimento de cada "
+        "barra (eixo horizontal) mostra **em quantos rounds** o valor cai "
+        "naquela faixa, então barras longas indicam valores mais comuns.",
     ]
     if por_dificuldade:
         partes.append("As cores separam os rounds Easy dos Hard.")
-    linhas = "A linha tracejada é a média e a linha contínua é a mediana"
+    linhas = ("A linha horizontal tracejada marca a média e a linha "
+              "horizontal contínua marca a mediana")
     if mostrar_kde:
         linhas += ", e a curva suave (KDE) resume o formato da distribuição"
     partes.append(linhas + ".")
     partes.append("Quando a média fica bem acima da mediana, poucos rounds "
                   "com valores muito altos estão puxando a média para cima.")
-    return " ".join(partes)
+    motivo = (
+        "**Por que um único histograma?** O dataset tem "
+        f"{n_variaveis} variáveis numéricas. Desenhar um histograma para cada "
+        "uma geraria dezenas de gráficos pequenos, difíceis de ler e de "
+        "comparar na tela. Por isso o dashboard mostra uma variável por vez, "
+        "escolhida no filtro **Variável do histograma** da sidebar, e deixa a "
+        "visão geral para o heatmap ao lado, que resume as relações entre as "
+        "variáveis de uma só vez."
+    )
+    return " ".join(partes) + "\n\n" + motivo
 
 
 def renderizar_dashboard1(intervalo, vars_corr, metodo, var_hist,
@@ -283,15 +296,17 @@ def renderizar_dashboard1(intervalo, vars_corr, metodo, var_hist,
         st.markdown(f"**Distribuição — {var_hist}**")
         dados = preparar_histograma(
             intervalo, var_hist, usar_log, por_dificuldade)
-        xlabel = f"log(1 + {var_hist})" if usar_log else var_hist
+        rotulo = f"log(1 + {var_hist})" if usar_log else var_hist
 
         if dados["valor"].nunique() < 2:
             st.info("A variável não varia neste intervalo de rounds.")
         else:
             st.altair_chart(grafico_histograma(
-                dados, xlabel, mostrar_kde), width="stretch")
+                dados, rotulo, mostrar_kde), width="stretch")
+            n_variaveis = len(
+                carregar_dados().select_dtypes(include=np.number).columns)
             st.markdown(explicar_histograma(
-                var_hist, usar_log, por_dificuldade, mostrar_kde))
+                var_hist, usar_log, por_dificuldade, mostrar_kde, n_variaveis))
             assim = dados["valor"].skew()
             if pd.notna(assim):
                 st.caption(f"Assimetria (skewness): {assim:.2f} — valores bem acima de 1 "
